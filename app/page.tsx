@@ -1,65 +1,65 @@
-import Image from "next/image";
+"use client"
+import QuestionCard from "@/app/components/review_card/question_card";
+import { useSM2Table } from "@/store/sm2.store";
 
 export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+    const questionRemaining = useSM2Table(state => state.getQuestionList().length);
+    const resetSM2Table = useSM2Table(state => state.reset);
+
+    return (
+        <main className="min-h-screen bg-slate-50 flex flex-col items-center justify-between p-6 md:p-12 font-sans selection:bg-blue-100">
+
+            {/* Top Navigation / Progress Area */}
+            <div className="w-full max-w-2xl flex justify-between items-center">
+                <div className="flex flex-col">
+                    <h1 className="text-xl font-bold text-slate-900 tracking-tight">
+                        MathFlow <span className="text-blue-600">SM2</span>
+                    </h1>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">
+                        Daily Training
+                    </p>
+                </div>
+
+                <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-2xl shadow-sm border border-slate-200">
+                    <div className="relative flex h-3 w-3">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+                    </div>
+                    <span className="text-sm font-bold text-slate-700">
+                        {questionRemaining} <span className="text-slate-400 font-medium">due</span>
+                    </span>
+                </div>
+            </div>
+
+            {/* Main Stage */}
+            <div className="flex-1 flex items-center justify-center w-full max-w-4xl py-12">
+                {questionRemaining > 0 ? (
+                    <QuestionCard />
+                ) : (
+                    <div className="text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
+                        <div className="text-6xl mb-4">🎉</div>
+                        <h2 className="text-3xl font-black text-slate-900 mb-2">Daily Goal Reached!</h2>
+                        <p className="text-slate-500 max-w-xs mx-auto">
+                            You&apos;ve mastered your math facts for today. Your memory is being optimized.
+                        </p>
+                    </div>
+                )}
+            </div>
+
+            {/* Footer / Utility Area */}
+            <div className="w-full max-w-2xl flex justify-center items-center pt-8 border-t border-slate-200">
+                <button
+                    onClick={() => {
+                        if(confirm("Are you sure you want to reset all progress?")) resetSM2Table();
+                    }}
+                    className="group flex items-center gap-2 text-slate-400 hover:text-red-500 transition-colors text-xs font-bold uppercase tracking-widest"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 transform group-hover:rotate-180 transition-transform duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    Reset Progress
+                </button>
+            </div>
+        </main>
+    );
 }

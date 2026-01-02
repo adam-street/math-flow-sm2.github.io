@@ -1,6 +1,7 @@
 import {IMathOperation} from "@/types/index";
 
-export interface Question_card_data {
+export interface IQuestionCardData {
+    sm2Id: string,
     x: number,
     y: number,
     operation: IMathOperation,
