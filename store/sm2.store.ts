@@ -10,7 +10,7 @@ interface SM2TableStore {
     data: Record<string, ISM2Entry>
 
     updateEntry: (key: string, is_correct: boolean, time_taken: number) => void
-    getNextReviewCard: () => ISM2Entry
+    getNextReviewCard: () => ISM2Entry | null
     getQuestionList: () => ISM2Entry[]
     reset: () => void
 }
@@ -65,6 +65,9 @@ export const useSM2Table = create<SM2TableStore>()(
             },
             getNextReviewCard: () => {
                 const questionList = get().getQuestionList()
+                if (questionList.length === 0) {
+                    return null
+                }
                 return questionList[Math.floor(Math.random() * questionList.length)]
             },
             reset: () => set({data: default_state})
