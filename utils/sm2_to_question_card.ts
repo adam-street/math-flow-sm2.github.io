@@ -2,7 +2,11 @@ import {ISM2Entry} from "@/types";
 import {IQuestionCardData} from "@/types/i_question_card_data";
 import {calculateMathOperation} from "@/utils/calculate_math_operation";
 
-export function SM2ToQuestionCard(entry: ISM2Entry): IQuestionCardData {
+export function SM2ToQuestionCard(entry: ISM2Entry | null): IQuestionCardData | null {
+    if (!entry) {
+        return null
+    }
+
     const sm2Id = entry.id
     const top_index = Math.floor(Math.random() * entry.values.length)
     const bottom_index = 1 - top_index
